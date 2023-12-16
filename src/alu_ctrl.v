@@ -1,19 +1,24 @@
-module alu_ctrl ( ALUOp_in, func7, func3, alu_ctrl);
+module alu_ctrl ( ALUOp, func, alu_ctrl);
 
-input [1:0] ALUOp_in;
-input [31:25] func7;
-input [14:12] func3;
+input [1:0] ALUOp;
+input [5:0] func;
 output reg [3:0] alu_ctrl;
 
-always @ (*) begin
-    case({ALUop_in,func7,func3})
-     12'b00_xxxxxxx_xxx: alu_ctrl<=4'b0010;
-     12'bx1_xxxxxxx_xxx: alu_ctrl<=4'b0110;
-     12'b1x_0000000_000: alu_ctrl<=4'b0010;
-     12'b1x_0100000_000: alu_ctrl<=4'b0110;
-     12'b1x_0000000_111: alu_ctrl<=4'b0000;
-     12'b1x_0000000_110: alu_ctrl<=4'b0001;
-    endcase
-end
+always @(ALUOp, func) begin
+	if(ALUOp == 0)
+		alu_ctrl <= 2;    //LW and SW use add
+	else if(ALUOp == 1)
+		alu_ctrl <= 6;		// branch use subtract
+	else
+		case(func)
+			32: alu_ctrl <= 2; //add
+			34: alu_ctrl <= 6; //subtract		
+			36: alu_ctrl <= 0; //and	
+			37: alu_ctrl <= 1; //or	
+			39: alu_ctrl <= 12; //nor
+			42: alu_ctrl <= 7; //slt
+			default: alu_ctrl <= 15; //should not happen
+		endcase
+	end
 
 endmodule

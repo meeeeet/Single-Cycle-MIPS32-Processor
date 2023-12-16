@@ -4,6 +4,6 @@ module mux_MemtoReg (read_data, ALURes, MemtoReg, out);
     input MemtoReg;
     output [31:0]out;
     
-    assign B=(MemtoReg)? read_data:ALURes;
+    assign out=(MemtoReg)? read_data:ALURes;
     
-    endmodule
+endmodule
