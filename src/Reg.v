@@ -16,26 +16,22 @@ assign read_data2=Register[rs2];
 always @ (*) begin
     // Reset function
     if (!rst) begin
-        // for (int i=0; i<32; ++i) begin
-        //     Register[i]<=32'd0;
-        // end
-        Register[0]=0;              //for testing
-        Register[1]=8;
-        Register[2]=20;
+        for (int i=0; i<32; ++i) begin
+            Register[i]<=32'd0;
+        end
     end
 
     //writing data
     else if (RegWrite) begin
         Register[rd]<=write_data;
-        // $display("Reg [%h] :> %h",rd,Register[rd]);
     end
 end
 
-initial begin
-    #60;
-    for (int i=0; i<10; ++i) begin
-        $display("R%d=>%h",i,Register[i]);
-    end
-end
+// initial begin
+//     #60;
+//     for (int i=0; i<10; ++i) begin
+//         $display("R%d=>%h",i,Register[i]);
+//     end
+// end
 
 endmodule
